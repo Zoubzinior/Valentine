@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For you ❤️</title>
+<style>
+:root{--bg1:#ffe3ec;--bg2:#ffc2d4;--card:#ffffff;--text:#4a1428;--accent:#e63768;--accent2:#b81d4b;--muted:#8a4a60;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2a0d18;--bg2:#4a1428;--card:#3a1220;--text:#ffe3ec;--accent:#ff5c8a;--accent2:#ff8fae;--muted:#e8a9bd;color-scheme:dark}}
+:root[data-theme="dark"]{--bg1:#2a0d18;--bg2:#4a1428;--card:#3a1220;--text:#ffe3ec;--accent:#ff5c8a;--accent2:#ff8fae;--muted:#e8a9bd;color-scheme:dark}
+html,body{height:100%;margin:0}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--text);font-family:Georgia,"Times New Roman",serif;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card{position:relative;z-index:2;background:var(--card);border-radius:28px;padding:36px 28px;max-width:420px;width:calc(100% - 40px);text-align:center;box-shadow:0 20px 50px rgba(180,30,75,.25);max-height:92%;overflow:hidden;box-sizing:border-box}
+.big{font-size:64px;line-height:1;animation:beat 1.2s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+h1{font-size:28px;margin:16px 0 8px;color:var(--accent2)}
+p{font-size:18px;line-height:1.5;margin:8px 0;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:28px;align-items:center}
+button{font:inherit;font-size:18px;border:0;border-radius:999px;padding:.75em 1.6em;cursor:pointer;transition:font-size .2s,padding .2s}
+#ja{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(230,55,104,.4)}
+#nee{background:transparent;color:var(--muted);border:2px solid var(--muted)}
+#yes{display:none}
+.heart{position:fixed;top:-40px;z-index:1;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.8}}
+</style>
+</head>
+<body>
+<div class="card" id="ask">
+  <div class="big">💌</div>
+  <h1 id="title">Hey babe…</h1>
+  <p>I have a question for you.</p>
+  <p><strong>Will you be my Valentine?</strong></p>
+  <div class="btns">
+    <button id="ja">Yes! 💖</button>
+    <button id="nee">No</button>
+  </div>
+</div>
+<div class="card" id="yes">
+  <div class="big">🥰</div>
+  <h1>Yay!</h1>
+  <p>I knew it already. You make my days brighter, and I’m so happy to have you.</p>
+  <p>I love you. Today, tomorrow and every day after. ❤️</p>
+</div>
+<script>
+(function(){
+  var name = decodeURIComponent((location.hash||"").slice(1)).replace(/[^\p{L} -]/gu,"").slice(0,30);
+  if(name){document.getElementById("title").textContent="Hey "+name+"…";}
+  var nee=document.getElementById("nee"), ja=document.getElementById("ja");
+  var tries=0, texts=["No","Are you sure?","Really sure?","Think again…","Pretty please?","Last chance! 🥺","Okay, just press Yes 😘"];
+  nee.addEventListener("click",function(){
+    tries++;
+    nee.textContent=texts[Math.min(tries,texts.length-1)];
+    ja.style.fontSize=Math.min(18+tries*7,110)+"px";
+    nee.style.fontSize=Math.max(18-tries*1.2,9)+"px";
+  });
+  function hearts(n){
+    var set=["❤️","💖","💕","💗","🌹"];
+    for(var i=0;i<n;i++){
+      (function(i){setTimeout(function(){
+        var s=document.createElement("span");
+        s.className="heart";
+        s.textContent=set[Math.floor(Math.random()*set.length)];
+        s.style.left=Math.random()*100+"vw";
+        s.style.fontSize=(18+Math.random()*28)+"px";
+        s.style.animationDuration=(3+Math.random()*3)+"s";
+        document.body.appendChild(s);
+        setTimeout(function(){s.remove();},6500);
+      },i*90);})(i);
+    }
+  }
+  ja.addEventListener("click",function(){
+    document.getElementById("ask").style.display="none";
+    document.getElementById("yes").style.display="block";
+    hearts(60);
+    setInterval(function(){hearts(6);},2500);
+  });
+  hearts(12);
+})();
+</script>
+</body>
+</html>
